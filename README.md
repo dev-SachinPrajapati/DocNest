@@ -12,6 +12,7 @@ Built with Next.js to handle the user interface, Liveblocks for real-time featur
 - Lexical Editor
 - ShadCN
 - Tailwind CSS
+- Clerk for Authentication
 
 ## <a name="features">🔋 Features</a>
 
