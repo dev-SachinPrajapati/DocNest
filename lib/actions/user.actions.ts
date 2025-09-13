@@ -6,8 +6,10 @@ import { liveblocks } from "../liveblocks";
 
 export const getClerkUsers = async ({ userIds }: { userIds: string[]}) => {
   try {
-    const { data } = await clerkClient.users.getUserList({
-      emailAddress: userIds,
+    const client = clerkClient();
+    const { data } = await client.users.getUserList({
+      // emailAddress: userIds,
+      query: userIds.join(","),
     });
 
     const users = data.map((user) => ({
@@ -17,7 +19,19 @@ export const getClerkUsers = async ({ userIds }: { userIds: string[]}) => {
       avatar: user.imageUrl,
     }));
 
-    const sortedUsers = userIds.map((email) => users.find((user) => user.email === email));
+    // const sortedUsers = userIds.map((email) => users.find((user) => user.email === email));
+    const sortedUsers = userIds.map((email) => {
+    const found = users.find((user) => user.email === email);
+      if (found) return found;
+
+      // return a placeholder user for pending invite
+      return {
+        id: email, // temporary
+        name: "Pending Invite",
+        email,
+        avatar: "/assets/images/logo.png",
+      };
+    });
 
     return parseStringify(sortedUsers);
   } catch (error) {
